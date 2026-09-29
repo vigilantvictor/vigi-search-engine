@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Vigi Search — AI-powered web search with source-backed answers."
+    >
+
+    <title>Vigi Search — AI Web Search</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+
+        <a
+            href="#"
+            class="logo"
+            id="homeButton"
+        >
+            VIGI<span>SEARCH</span>
+        </a>
+
+        <div class="nav-actions">
+
+            <button
+                class="nav-button"
+                id="historyButton"
+            >
+                <span>◷</span>
+                History
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         HOME
+    ========================== -->
+
+    <main>
+
+        <section
+            id="hero"
+            class="hero"
+        >
+
+            <div class="hero-glow"></div>
+
+            <div class="hero-content">
+
+                <div class="badge">
+                    <span class="status-dot"></span>
+                    AI-POWERED WEB SEARCH
+                </div>
+
+                <h1>
+                    Search the web.
+                    <br>
+                    <span>Understand more.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Ask anything. Get an AI-powered answer
+                    backed by real web sources.
+                </p>
+
+
+                <form
+                    id="searchForm"
+                    class="search-box hero-search"
+                >
+
+                    <div class="search-icon">
+                        ⌕
+                    </div>
+
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Ask anything..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+                    <kbd>Enter</kbd>
+
+                    <button
+                        type="submit"
+                        id="searchButton"
+                    >
+                        Search
+                    </button>
+
+                </form>
+
+
+                <div class="suggestions">
+
+                    <button
+                        data-query="What is artificial intelligence?"
+                    >
+                        What is AI?
+                    </button>
+
+                    <button
+                        data-query="Best Python libraries for machine learning"
+                    >
+                        Python ML libraries
+                    </button>
+
+                    <button
+                        data-query="How does quantum computing work?"
+                    >
+                        Quantum computing
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RESULTS
+        ========================== -->
+
+        <section
+            id="resultsSection"
+            class="results-section hidden"
+        >
+
+            <div class="results-top">
+
+                <form
+                    id="searchAgainForm"
+                    class="search-box results-search"
+                >
+
+                    <div class="search-icon">
+                        ⌕
+                    </div>
+
+                    <input
+                        id="searchAgainInput"
+                        type="text"
+                        placeholder="Search again..."
+                        autocomplete="off"
+                    >
+
+                    <button type="submit">
+                        Search
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- Loading -->
+
+            <div
+                id="loading"
+                class="loading hidden"
+            >
+
+                <div class="loading-animation">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+                <p>
+                    Searching the web
+                </p>
+
+                <small>
+                    Finding sources and preparing your answer...
+                </small>
+
+            </div>
+
+
+            <!-- Search content -->
+
+            <div
+                id="searchContent"
+                class="search-content"
+            >
+
+                <!-- AI Answer -->
+
+                <section
+                    id="answerContainer"
+                    class="answer-container"
+                ></section>
+
+
+                <!-- Sources -->
+
+                <section
+                    id="sourcesContainer"
+                    class="sources-container"
+                ></section>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             HISTORY
+        ========================== -->
+
+        <section
+            id="historySection"
+            class="history-section hidden"
+        >
+
+            <div class="history-header">
+
+                <div>
+
+                    <div class="section-label">
+                        YOUR SEARCHES
+                    </div>
+
+                    <h2>
+                        Search History
+                    </h2>
+
+                </div>
+
+                <button
+                    id="clearHistoryButton"
+                    class="danger-button"
+                >
+                    Clear history
+                </button>
+
+            </div>
+
+            <div
+                id="historyContainer"
+                class="history-container"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         SOURCE SIDE PANEL
+    ========================== -->
+
+    <aside
+        id="sourcePanel"
+        class="source-panel"
+    >
+
+        <div class="source-panel-header">
+
+            <div>
+
+                <span class="panel-label">
+                    SOURCE
+                </span>
+
+                <h3 id="panelTitle">
+                    Source
+                </h3>
+
+            </div>
+
+            <button
+                id="closePanel"
+                class="close-button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="panelContent"
+            class="source-panel-content"
+        ></div>
+
+
+        <div class="source-panel-actions">
+
+            <a
+                id="panelOpenLink"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="panel-open-button"
+            >
+                Open original ↗
+            </a>
+
+            <button
+                id="panelAskButton"
+                class="panel-ai-button"
+            >
+                Ask AI about this source
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <div
+        id="panelOverlay"
+        class="panel-overlay"
+    ></div>
+
+
+    <!-- =========================
+         TOAST
+    ========================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+
+    <!-- Markdown renderer -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+    ></script>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
