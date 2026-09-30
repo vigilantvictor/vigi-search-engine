@@ -1,29 +1,29 @@
-import sqlite3
-from pathlib import Path
+import os
 from datetime import datetime
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_PATH = BASE_DIR / "data" / "search_history.db"
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 
 def get_connection():
-    DATABASE_PATH.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    database_url = os.getenv("DATABASE_URL")
 
-    return sqlite3.connect(DATABASE_PATH)
+    if not database_url:
+        raise RuntimeError(
+            "DATABASE_URL is missing. "
+            "Set it in your environment variables."
+        )
+
+    return psycopg2.connect(database_url)
 
 
 def initialize_database():
     connection = get_connection()
-
     cursor = connection.cursor()
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS searches (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             query TEXT NOT NULL,
             answer TEXT,
             created_at TEXT NOT NULL
@@ -31,19 +31,19 @@ def initialize_database():
     """)
 
     connection.commit()
+    cursor.close()
     connection.close()
 
 
 def save_search(query, answer):
     connection = get_connection()
-
     cursor = connection.cursor()
 
     cursor.execute(
         """
         INSERT INTO searches
         (query, answer, created_at)
-        VALUES (?, ?, ?)
+        VALUES (%s, %s, %s)
         """,
         (
             query,
@@ -53,12 +53,12 @@ def save_search(query, answer):
     )
 
     connection.commit()
+    cursor.close()
     connection.close()
 
 
 def get_history(limit=20):
     connection = get_connection()
-
     cursor = connection.cursor()
 
     cursor.execute(
@@ -66,13 +66,14 @@ def get_history(limit=20):
         SELECT id, query, created_at
         FROM searches
         ORDER BY id DESC
-        LIMIT ?
+        LIMIT %s
         """,
         (limit,)
     )
 
     results = cursor.fetchall()
 
+    cursor.close()
     connection.close()
 
     return results
@@ -80,10 +81,10 @@ def get_history(limit=20):
 
 def clear_history():
     connection = get_connection()
-
     cursor = connection.cursor()
 
     cursor.execute("DELETE FROM searches")
 
     connection.commit()
+    cursor.close()
     connection.close()
